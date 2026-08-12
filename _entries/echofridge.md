@@ -1,8 +1,8 @@
 ---
 date: 2026-08-11
 type: 荒謬發明
-title: 回聲冰箱 EchoFridge Mk.II
-tagline: 家用冷藏設備；1998 年上市
+title: 回聲冰箱
+tagline: EchoFridge Mk.II；1998 年上市
 hatnote: 本條目部分規格引自已停止發行的《北實家電年鑑》，數據取得不易，歡迎補充其他佐證。
 infobox:
   - label: 製造商
