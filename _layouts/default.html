@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% if page.title %}{{ page.title }} — {{ site.title }}{% else %}{{ site.title }} — {{ site.description }}{% endif %}</title>
+<meta name="description" content="{{ page.tagline | default: site.description }}">
+<link rel="stylesheet" href="{{ '/assets/style.css' | relative_url }}">
+</head>
+<body>
+
+{%- assign all = site.entries | sort: 'date' | reverse -%}
+{%- assign types = site.entries | map: 'type' | uniq | sort -%}
+
+<div class="topbar">
+  <div class="brand"><a href="{{ '/' | relative_url }}">{{ site.title }}</a><small>{{ site.tagline }}</small></div>
+  <form class="searchwrap" action="{{ '/' | relative_url }}" method="get">
+    <input type="search" name="q" placeholder="檢索條目、內文、分類…" value="{{ page.query }}">
+    <button class="btn" type="submit">檢索</button>
+    <a class="btn" href="{{ '/random/' | relative_url }}">隨機條目</a>
+  </form>
+</div>
+
+<div class="layout">
+  <nav class="side">
+    <h5>導覽</h5>
+    <ul>
+      <li{% if page.url == '/' %} class="on"{% endif %}><a href="{{ '/' | relative_url }}">條目索引</a></li>
+      <li><a href="{{ all.first.url | relative_url }}">最新收錄</a></li>
+      <li><a href="{{ '/random/' | relative_url }}">隨機條目</a></li>
+      <li{% if page.url contains '/about' %} class="on"{% endif %}><a href="{{ '/about/' | relative_url }}">關於本館</a></li>
+    </ul>
+
+    <h5>依類型瀏覽</h5>
+    <ul>
+      {%- for t in types -%}
+      {%- assign n = site.entries | where: 'type', t | size -%}
+      {%- assign tp = site.pages | where: 'type', t | first -%}
+      <li{% if page.type == t %} class="on"{% endif %}>
+        <a href="{{ tp.url | relative_url }}">{{ t }}</a> <span class="ct">({{ n }})</span>
+      </li>
+      {%- endfor -%}
+    </ul>
+
+    <h5>近期收錄</h5>
+    <ul>
+      {%- for e in all limit: 8 -%}
+      <li{% if page.url == e.url %} class="on"{% endif %}><a href="{{ e.url | relative_url }}">{{ e.title }}</a></li>
+      {%- endfor -%}
+    </ul>
+  </nav>
+
+  <main>
+    {{ content }}
+  </main>
+</div>
+
+</body>
+</html>

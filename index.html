@@ -1,0 +1,60 @@
+---
+layout: default
+---
+
+{%- assign all = site.entries | sort: 'date' | reverse -%}
+{%- assign asc = site.entries | sort: 'date' -%}
+{%- assign types = site.entries | map: 'type' | uniq -%}
+
+<h1 class="title">條目索引</h1>
+<p class="subtitle" id="lede">依收錄日期遞減排列，共 {{ all | size }} 筆，涵蓋 {{ types | size }} 種類型。</p>
+
+<div class="notice" id="hit" hidden></div>
+
+<table class="wt" id="idx">
+  <thead><tr><th>檔案編號</th><th>收錄日期</th><th>類型</th><th>條目名稱</th></tr></thead>
+  <tbody>
+    {%- for e in all -%}
+    {%- assign idx = 0 -%}
+    {%- for a in asc -%}{%- if a.url == e.url -%}{%- assign idx = forloop.index -%}{%- endif -%}{%- endfor -%}
+    {%- assign padded = idx | prepend: '0000' -%}
+    {%- assign tp = site.pages | where: 'type', e.type | first -%}
+    {%- capture haystack -%}{{ e.title }} {{ e.tagline }} {{ e.type }} {{ e.cats | join: ' ' }} {{ e.content | strip_html | strip_newlines | truncate: 800, '' }}{%- endcapture -%}
+    <tr data-text="{{ haystack | escape_once }}">
+      <td class="n mono">ABS-{{ padded | slice: -4, 4 }}</td>
+      <td class="d">{{ e.date | date: "%Y年%-m月%-d日" }}</td>
+      <td class="t"><a href="{{ tp.url | relative_url }}">{{ e.type }}</a></td>
+      <td><a href="{{ e.url | relative_url }}">{{ e.title }}</a><br><span class="sub">{{ e.tagline }}</span></td>
+    </tr>
+    {%- endfor -%}
+  </tbody>
+</table>
+
+<div class="notice" id="none" hidden>查無符合條件之條目。此結果本身亦已列入館藏考慮。</div>
+
+<script>
+(function () {
+  var q = new URLSearchParams(location.search).get('q');
+  if (!q) return;
+
+  var box = document.querySelector('input[type=search]');
+  if (box) box.value = q;
+
+  var needle = q.toLowerCase();
+  var rows = document.querySelectorAll('#idx tbody tr');
+  var hits = 0;
+
+  rows.forEach(function (tr) {
+    var match = (tr.getAttribute('data-text') || '').toLowerCase().indexOf(needle) !== -1;
+    tr.hidden = !match;
+    if (match) hits++;
+  });
+
+  var hit = document.getElementById('hit');
+  hit.textContent = '檢索字串「' + q + '」共命中 ' + hits + ' 個條目。';
+  hit.hidden = false;
+  document.getElementById('lede').hidden = true;
+  document.getElementById('none').hidden = hits > 0;
+  document.getElementById('idx').hidden = hits === 0;
+})();
+</script>

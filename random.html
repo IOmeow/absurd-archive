@@ -1,0 +1,25 @@
+---
+layout: default
+title: 隨機條目
+permalink: /random/
+---
+
+<h1 class="title">隨機條目</h1>
+<p class="hatnote">正在自館藏中抽取一則條目。若未自動跳轉，請由下方清單自行選取。</p>
+
+<ul>
+  {%- for e in site.entries -%}
+  <li><a href="{{ e.url | relative_url }}">{{ e.title }}</a></li>
+  {%- endfor -%}
+</ul>
+
+<script>
+(function () {
+  var urls = [
+    {%- for e in site.entries -%}
+    "{{ e.url | relative_url }}"{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+  ];
+  if (urls.length) location.replace(urls[Math.floor(Math.random() * urls.length)]);
+})();
+</script>

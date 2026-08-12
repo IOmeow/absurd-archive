@@ -1,0 +1,62 @@
+---
+layout: default
+---
+
+{%- assign asc = site.entries | sort: 'date' -%}
+{%- assign idx = 0 -%}
+{%- for e in asc -%}{%- if e.url == page.url -%}{%- assign idx = forloop.index -%}{%- endif -%}{%- endfor -%}
+{%- assign padded = idx | prepend: '0000' -%}
+{%- assign serial = padded | slice: -4, 4 -%}
+
+{%- assign fallbacks = "本條目部分章節仰賴單一來源，需要補充其他佐證。|本條目自最近一次實地查訪後，未有實質更新。|本條目與相關條目之內容存在重疊，已提請合併討論。|本條目之部分數據引自已停止發行的機關出版品，取得不易。|本條目的中立性有爭議，相關討論見討論頁。" | split: "|" -%}
+{%- assign fi = idx | modulo: 5 -%}
+{%- assign hat = page.hatnote | default: fallbacks[fi] -%}
+
+{%- assign tp = site.pages | where: 'type', page.type | first -%}
+
+<h1 class="title">{{ page.title }}</h1>
+<p class="subtitle">{{ page.tagline }}</p>
+<p class="hatnote">{{ hat }}</p>
+
+{% if page.infobox %}
+<table class="infobox">
+  <caption>{{ page.title }}</caption>
+  <tbody>
+    {%- for row in page.infobox %}
+    <tr><th>{{ row.label }}</th><td>{{ row.value }}</td></tr>
+    {%- endfor %}
+    <tr><th>檔案編號</th><td class="mono">ABS-{{ serial }}</td></tr>
+  </tbody>
+  <div class="infonote">本表數據引自原始送審文件，未經第三方複核。</div>
+</table>
+{% endif %}
+
+{{ content }}
+
+{% if page.note %}
+<h2>備註</h2>
+<p>{{ page.note }}</p>
+{% endif %}
+
+{% if page.cats %}
+<div class="cats"><b>分類</b>{% for c in page.cats %}<a href="{{ '/' | relative_url }}?q={{ c | uri_escape }}">{{ c }}</a>{% endfor %}</div>
+{% endif %}
+
+<div class="seq">
+  {%- if idx > 1 -%}
+    {%- assign pi = idx | minus: 2 -%}
+    {%- assign prev = asc[pi] -%}
+    <div><span>前一則</span><a href="{{ prev.url | relative_url }}">← {{ prev.title }}</a></div>
+  {%- endif -%}
+  {%- assign total = asc | size -%}
+  {%- if idx < total -%}
+    {%- assign next = asc[idx] -%}
+    <div class="r"><span>後一則</span><a href="{{ next.url | relative_url }}">{{ next.title }} →</a></div>
+  {%- endif -%}
+</div>
+
+<div class="pagefoot">
+  本頁面最後修訂於 {{ page.date | date: "%Y年%-m月%-d日" }}。條目類型：<a href="{{ tp.url | relative_url }}">{{ page.type }}</a>。檔案編號 <span class="mono">ABS-{{ serial }}</span>。<br>
+  取自「<span class="mono">{{ page.url | absolute_url }}</span>」<br>
+  本館內容依《館藏資料轉載準則》第三條釋出，轉載時應保留檔案編號。
+</div>

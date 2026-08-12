@@ -1,0 +1,33 @@
+---
+layout: default
+---
+
+{%- assign rows = site.entries | where: 'type', page.type | sort: 'date' | reverse -%}
+{%- assign asc = site.entries | sort: 'date' -%}
+
+<h1 class="title">分類：{{ page.type }}</h1>
+<p class="subtitle">本分類共有 {{ rows | size }} 個條目。</p>
+
+{% if page.blurb %}<p class="hatnote">{{ page.blurb }}</p>{% endif %}
+
+{% if rows.size == 0 %}
+<div class="notice">本分類目前沒有條目。相關徵集作業仍在進行。</div>
+{% else %}
+<table class="wt">
+  <thead><tr><th>檔案編號</th><th>收錄日期</th><th>條目名稱</th></tr></thead>
+  <tbody>
+    {%- for e in rows -%}
+    {%- assign idx = 0 -%}
+    {%- for a in asc -%}{%- if a.url == e.url -%}{%- assign idx = forloop.index -%}{%- endif -%}{%- endfor -%}
+    {%- assign padded = idx | prepend: '0000' -%}
+    <tr>
+      <td class="n mono">ABS-{{ padded | slice: -4, 4 }}</td>
+      <td class="d">{{ e.date | date: "%Y年%-m月%-d日" }}</td>
+      <td><a href="{{ e.url | relative_url }}">{{ e.title }}</a><br><span class="sub">{{ e.tagline }}</span></td>
+    </tr>
+    {%- endfor -%}
+  </tbody>
+</table>
+{% endif %}
+
+<div class="cats"><b>分類</b><span class="c">條目類型</span><span class="c">館藏分類頁</span></div>
