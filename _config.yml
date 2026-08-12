@@ -8,7 +8,7 @@ description: 綜合條目索引
 # 若日後改用自訂網域或 username.github.io 根目錄，把 baseurl 改成空字串 ""。
 # ---------------------------------------------------------------------------
 baseurl: "/absurd-archive"
-url: ""
+url: "https://iomeow.github.io"
 
 # 條目集合：每則 _entries/*.md 會產生 /entries/<檔名>/ 這個網址
 collections:
