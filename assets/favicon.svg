@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <rect x="1" y="1" width="30" height="30" rx="5" fill="#202122"/>
+  <rect x="1.5" y="1.5" width="29" height="29" rx="4.5" fill="none" stroke="#54595d" stroke-width="1"/>
+  <text x="16" y="17" fill="#f8f9fa" font-family="Georgia,'Times New Roman','Songti TC',serif"
+        font-size="23" font-weight="400" text-anchor="middle" dominant-baseline="central">A</text>
+</svg>
