@@ -2,6 +2,13 @@ title: 荒謬檔案館
 tagline: General Archive · Est. 1961
 description: 綜合條目索引
 
+# 條目於每日凌晨 3:00（台北）產生，date 為當天日期。
+# 若不設時區，Jekyll 以 UTC 解讀日期，凌晨 3:00 台北（前一日 19:xx UTC）
+# 會判定當天日期的條目為「未來」而不產生頁面（列在索引卻 404）。
+# 設定台北時區並允許未來日期，確保條目當場發布。
+timezone: Asia/Taipei
+future: true
+
 # ---------------------------------------------------------------------------
 # 網址設定
 # 專案型 GitHub Pages（username.github.io/absurd-archive）請保留 baseurl。
